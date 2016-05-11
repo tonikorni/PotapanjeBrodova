@@ -52,6 +52,7 @@
     <Compile Include="Polje.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SlučajniOdabirPočetnogPolja.cs" />
+    <Compile Include="SustavniPucač.cs" />
     <Compile Include="Topništvo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
