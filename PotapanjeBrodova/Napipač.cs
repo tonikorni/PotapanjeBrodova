@@ -72,8 +72,21 @@ namespace PotapanjeBrodova
             return kandidati;
         }
 
+        public void EvidentirajRezultat(RezultatGađanja rezultat)
+        {
+            throw new NotImplementedException();
+        }
+
         private Mreža mreža;
         private int duljinaBroda;
         private Random slučajni = new Random();
+
+        public IEnumerable<Polje> PogođenaPolja
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

@@ -33,8 +33,21 @@ namespace PotapanjeBrodova
             return najdulji.ElementAt(indeks).First();
         }
 
+        public void EvidentirajRezultat(RezultatGađanja rezultat)
+        {
+            throw new NotImplementedException();
+        }
+
         Polje prvoPogođeno;
         Mreža mreža;
         Random slučajni = new Random();
+
+        public IEnumerable<Polje> PogođenaPolja
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }
