@@ -15,6 +15,8 @@ namespace PotapanjeBrodova
 
     public class Topništvo
     {
+        public event EventHandler FlotaPotopljena;
+
         public Topništvo(int redaka, int stupaca, int[] duljineBrodova)
         {
             mreža = new Mreža(redaka, stupaca);
@@ -30,32 +32,40 @@ namespace PotapanjeBrodova
 
         public void ObradiGađanje(RezultatGađanja rezultat)
         {
+            pucač.EvidentirajRezultat(rezultat);
             switch (rezultat)
             {
-                case RezultatGađanja.Potonuće:
-                    PromijeniTaktikuUNapipavanje();
-                    break;
-                case RezultatGađanja.Pogodak:
-                    switch (TrenutnaTaktika)
-                    {
-                        case TaktikaGađanja.Napipavanje:
-                            PromijeniTaktikuUOkruživanje();
-                            break;
-                        case TaktikaGađanja.Okruživanje:
-                            PromijeniTaktikuUSustavnoUništavanje();
-                            break;
-                        case TaktikaGađanja.SustavnoUništavanje:
-                            break;
-                        default:
-                            Debug.Assert(false, string.Format("Nepodržana taktika {0}", TrenutnaTaktika.ToString()));
-                            break;
-                    }
-                    break;
                 case RezultatGađanja.Promašaj:
-                    break;
+                    return;
+                case RezultatGađanja.Pogodak:
+                    PromijeniTaktikuUSlučajuPogotka();
+                    return;
+                case RezultatGađanja.Potonuće:
+                    ZabilježiPotopljeniBrod();
+                    if (duljineBrodova.Count > 0)
+                        PromijeniTaktikuUNapipavanje();
+                    return;
                 default:
                     Debug.Assert(false, string.Format("Nepodržani rezultat gađanja {0}", rezultat.ToString()));
-                    break;
+                    return;
+            }
+        }
+
+        private void PromijeniTaktikuUSlučajuPogotka()
+        {
+            switch (TrenutnaTaktika)
+            {
+                case TaktikaGađanja.SustavnoUništavanje:
+                    return;
+                case TaktikaGađanja.Napipavanje:
+                    PromijeniTaktikuUOkruživanje();
+                    return;
+                case TaktikaGađanja.Okruživanje:
+                    PromijeniTaktikuUSustavnoUništavanje();
+                    return;
+                default:
+                    Debug.Assert(false, string.Format("Nepodržana taktika {0}", TrenutnaTaktika.ToString()));
+                    return;
             }
         }
 
@@ -68,11 +78,23 @@ namespace PotapanjeBrodova
         private void PromijeniTaktikuUOkruživanje()
         {
             TrenutnaTaktika = TaktikaGađanja.Okruživanje;
+            pucač = new KružniPucač(pucač.PogođenaPolja.First(), mreža);
         }
 
         private void PromijeniTaktikuUSustavnoUništavanje()
         {
             TrenutnaTaktika = TaktikaGađanja.SustavnoUništavanje;
+            pucač = new SustavniPucač(pucač.PogođenaPolja, mreža);
+        }
+
+        private void ZabilježiPotopljeniBrod()
+        {
+            // makni potopljeni brod iz liste preostalih duljina brodova
+            int duljinaPotopljenogBroda = pucač.PogođenaPolja.Count();
+            duljineBrodova.Remove(duljinaPotopljenogBroda);
+            // akoj je potopljen i zadnji broj, objavi to
+            if (duljineBrodova.Count == 0)
+                FlotaPotopljena?.Invoke(this, EventArgs.Empty);
         }
 
         public TaktikaGađanja TrenutnaTaktika

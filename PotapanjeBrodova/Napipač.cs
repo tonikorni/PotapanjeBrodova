@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -19,7 +20,9 @@ namespace PotapanjeBrodova
             polja.AddRange(DajKandidateZaVertikalniBrod());
 
             int indeks = slučajni.Next(0, polja.Count());
-            return polja[indeks];
+            zadnjeGađano = polja[indeks];
+            mreža.EliminirajPolje(zadnjeGađano);
+            return zadnjeGađano;
         }
 
         public IEnumerable<Polje> DajKandidateZaHorizontalniBrod()
@@ -74,10 +77,10 @@ namespace PotapanjeBrodova
 
         public void EvidentirajRezultat(RezultatGađanja rezultat)
         {
-            throw new NotImplementedException();
         }
 
         private Mreža mreža;
+        private Polje zadnjeGađano;
         private int duljinaBroda;
         private Random slučajni = new Random();
 
@@ -85,7 +88,8 @@ namespace PotapanjeBrodova
         {
             get
             {
-                throw new NotImplementedException();
+                Debug.Assert(zadnjeGađano != null);
+                return new List<Polje> { zadnjeGađano };
             }
         }
     }

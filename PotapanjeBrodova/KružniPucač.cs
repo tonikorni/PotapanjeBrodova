@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -9,14 +10,15 @@ namespace PotapanjeBrodova
     {
         public KružniPucač(Polje prvoPogođeno, Mreža mreža)
         {
-            this.prvoPogođeno = prvoPogođeno;
+            pogođenaPolja.Add(prvoPogođeno);
             this.mreža = mreža;
         }
 
         public Polje UputiPucanj()
         {
-            int redak = prvoPogođeno.Redak;
-            int stupac = prvoPogođeno.Stupac;
+            Debug.Assert(pogođenaPolja.Count == 1);
+            int redak = pogođenaPolja[0].Redak;
+            int stupac = pogođenaPolja[0].Stupac;
 
             List<IEnumerable<Polje>> kandidati = new List<IEnumerable<Polje>>();
             foreach (Smjer smjer in Enum.GetValues(typeof(Smjer)))
@@ -27,18 +29,21 @@ namespace PotapanjeBrodova
             var grupe = kandidati.GroupBy(lista => lista.Count());
 
             var najdulji = grupe.First();
-            if (najdulji.Count() == 1)
-                return najdulji.First().First();
-            int indeks = slučajni.Next(najdulji.Count());
-            return najdulji.ElementAt(indeks).First();
+            int indeks = najdulji.Count() == 1 ? 0 : slučajni.Next(najdulji.Count());
+            zadnjeGađano = najdulji.ElementAt(indeks).First();
+            mreža.EliminirajPolje(zadnjeGađano);
+            return zadnjeGađano;
         }
 
         public void EvidentirajRezultat(RezultatGađanja rezultat)
         {
-            throw new NotImplementedException();
+            if (rezultat == RezultatGađanja.Promašaj)
+                return;
+            pogođenaPolja.Add(zadnjeGađano);
         }
 
-        Polje prvoPogođeno;
+        List<Polje> pogođenaPolja = new List<Polje>();
+        Polje zadnjeGađano;
         Mreža mreža;
         Random slučajni = new Random();
 
@@ -46,7 +51,7 @@ namespace PotapanjeBrodova
         {
             get
             {
-                throw new NotImplementedException();
+                return pogođenaPolja;
             }
         }
     }

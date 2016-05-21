@@ -9,7 +9,7 @@ namespace PotapanjeBrodova
     {
         public SustavniPucač(IEnumerable<Polje> pogođena, Mreža mreža)
         {
-            pogođenaPolja = new List<Polje>(pogođena);
+            pogođenaPolja.AddRange(pogođena);
             pogođenaPolja.Sort((a, b) => a.Redak - b.Redak + a.Stupac - b.Stupac);
             this.mreža = mreža;
         }
@@ -18,17 +18,11 @@ namespace PotapanjeBrodova
         {
             Orijentacija o = DajOrijentaciju();
             var liste = DajPoljaUNastavku(o);
-            if (liste.Count() == 1)
-                zadnjeGađano = liste.First().First();
-            else
-            {
-                int indeks = slučajni.Next(liste.Count());
-                zadnjeGađano = liste.ElementAt(indeks).First();
-            }
+            int indeks = liste.Count() == 1 ? 0 : slučajni.Next(liste.Count());
+            zadnjeGađano = liste.ElementAt(indeks).First();
+            mreža.EliminirajPolje(zadnjeGađano);
             return zadnjeGađano;
         }
-
-        private Polje zadnjeGađano;
 
         private Orijentacija DajOrijentaciju()
         {
@@ -75,7 +69,8 @@ namespace PotapanjeBrodova
             pogođenaPolja.Sort((a, b) => a.Redak - b.Redak + a.Stupac - b.Stupac);
         }
 
-        List<Polje> pogođenaPolja;
+        List<Polje> pogođenaPolja = new List<Polje>();
+        private Polje zadnjeGađano;
         Mreža mreža;
         Random slučajni = new Random();
 
