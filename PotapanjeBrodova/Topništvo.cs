@@ -20,6 +20,7 @@ namespace PotapanjeBrodova
         public Topništvo(int redaka, int stupaca, int[] duljineBrodova)
         {
             mreža = new Mreža(redaka, stupaca);
+            eliminatorPolja = new KlasičniEliminatorPolja();
             this.duljineBrodova = new List<int>(duljineBrodova);
             this.duljineBrodova.Sort((d1, d2) => d2 - d1);
             PromijeniTaktikuUNapipavanje();
@@ -43,6 +44,7 @@ namespace PotapanjeBrodova
                     return;
                 case RezultatGađanja.Potonuće:
                     ZabilježiPotopljeniBrod();
+                    EliminirajPoljaOkoBroda(pucač.PogođenaPolja);
                     if (duljineBrodova.Count > 0)
                         PromijeniTaktikuUNapipavanje();
                     return;
@@ -50,6 +52,11 @@ namespace PotapanjeBrodova
                     Debug.Assert(false, string.Format("Nepodržani rezultat gađanja {0}", rezultat.ToString()));
                     return;
             }
+        }
+
+        public TaktikaGađanja TrenutnaTaktika
+        {
+            get; private set;
         }
 
         private void PromijeniTaktikuUSlučajuPogotka()
@@ -98,13 +105,16 @@ namespace PotapanjeBrodova
                 FlotaPotopljena?.Invoke(this, EventArgs.Empty);
         }
 
-        public TaktikaGađanja TrenutnaTaktika
+        private void EliminirajPoljaOkoBroda(IEnumerable<Polje> brodskaPolja)
         {
-            get; private set;
+            IEnumerable<Polje> zaEliminirati = eliminatorPolja.PoljaKojaTrebaUklonitiOkoBroda(brodskaPolja, mreža.Redaka, mreža.Stupaca);
+            foreach (Polje p in zaEliminirati)
+                mreža.EliminirajPolje(p);
         }
 
         IPucač pucač;
         Mreža mreža;
         List<int> duljineBrodova;
+        IEliminatorPolja eliminatorPolja;
     }
 }

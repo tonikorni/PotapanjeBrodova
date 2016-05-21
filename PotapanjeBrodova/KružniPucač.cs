@@ -46,10 +46,7 @@ namespace PotapanjeBrodova
 
         public IEnumerable<Polje> PogođenaPolja
         {
-            get
-            {
-                return pogođenaPolja;
-            }
+            get { return pogođenaPolja; }
         }
 
         #endregion Implementacija sučelja IPucač
