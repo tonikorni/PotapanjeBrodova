@@ -14,6 +14,8 @@ namespace PotapanjeBrodova
             this.duljinaBroda = duljinaBroda;
         }
 
+        #region Implementacija sučelja IPucač
+
         public Polje UputiPucanj()
         {
             List<Polje> polja = DajKandidateZaHorizontalniBrod().ToList();
@@ -24,6 +26,21 @@ namespace PotapanjeBrodova
             mreža.EliminirajPolje(zadnjeGađano);
             return zadnjeGađano;
         }
+
+        public void EvidentirajRezultat(RezultatGađanja rezultat)
+        {
+        }
+
+        public IEnumerable<Polje> PogođenaPolja
+        {
+            get
+            {
+                Debug.Assert(zadnjeGađano != null);
+                return new List<Polje> { zadnjeGađano };
+            }
+        }
+
+        #endregion Implementacija sučelja IPucač
 
         public IEnumerable<Polje> DajKandidateZaHorizontalniBrod()
         {
@@ -75,22 +92,9 @@ namespace PotapanjeBrodova
             return kandidati;
         }
 
-        public void EvidentirajRezultat(RezultatGađanja rezultat)
-        {
-        }
-
         private Mreža mreža;
         private Polje zadnjeGađano;
         private int duljinaBroda;
         private Random slučajni = new Random();
-
-        public IEnumerable<Polje> PogođenaPolja
-        {
-            get
-            {
-                Debug.Assert(zadnjeGađano != null);
-                return new List<Polje> { zadnjeGađano };
-            }
-        }
     }
 }

@@ -14,6 +14,8 @@ namespace PotapanjeBrodova
             this.mreža = mreža;
         }
 
+        #region Implementacija sučelja IPucač
+
         public Polje UputiPucanj()
         {
             Debug.Assert(pogođenaPolja.Count == 1);
@@ -42,11 +44,6 @@ namespace PotapanjeBrodova
             pogođenaPolja.Add(zadnjeGađano);
         }
 
-        List<Polje> pogođenaPolja = new List<Polje>();
-        Polje zadnjeGađano;
-        Mreža mreža;
-        Random slučajni = new Random();
-
         public IEnumerable<Polje> PogođenaPolja
         {
             get
@@ -54,5 +51,13 @@ namespace PotapanjeBrodova
                 return pogođenaPolja;
             }
         }
+
+        #endregion Implementacija sučelja IPucač
+
+        List<Polje> pogođenaPolja = new List<Polje>();
+        Polje zadnjeGađano;
+        Mreža mreža;
+        Random slučajni = new Random();
+
     }
 }

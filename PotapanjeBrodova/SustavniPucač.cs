@@ -14,6 +14,8 @@ namespace PotapanjeBrodova
             this.mreža = mreža;
         }
 
+        #region Implementacija sučelja IPucač
+
         public Polje UputiPucanj()
         {
             Orijentacija o = DajOrijentaciju();
@@ -23,6 +25,24 @@ namespace PotapanjeBrodova
             mreža.EliminirajPolje(zadnjeGađano);
             return zadnjeGađano;
         }
+
+        public void EvidentirajRezultat(RezultatGađanja rezultat)
+        {
+            if (rezultat == RezultatGađanja.Promašaj)
+                return;
+            pogođenaPolja.Add(zadnjeGađano);
+            pogođenaPolja.Sort((a, b) => a.Redak - b.Redak + a.Stupac - b.Stupac);
+        }
+
+        public IEnumerable<Polje> PogođenaPolja
+        {
+            get
+            {
+                return pogođenaPolja;
+            }
+        }
+
+        #endregion Implementacija sučelja IPucač
 
         private Orijentacija DajOrijentaciju()
         {
@@ -61,25 +81,10 @@ namespace PotapanjeBrodova
             return liste;
         }
 
-        public void EvidentirajRezultat(RezultatGađanja rezultat)
-        {
-            if (rezultat == RezultatGađanja.Promašaj)
-                return;
-            pogođenaPolja.Add(zadnjeGađano);
-            pogođenaPolja.Sort((a, b) => a.Redak - b.Redak + a.Stupac - b.Stupac);
-        }
-
         List<Polje> pogođenaPolja = new List<Polje>();
         private Polje zadnjeGađano;
         Mreža mreža;
         Random slučajni = new Random();
 
-        public IEnumerable<Polje> PogođenaPolja
-        {
-            get
-            {
-                return pogođenaPolja;
-            }
-        }
     }
 }

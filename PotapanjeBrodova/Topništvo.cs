@@ -33,6 +33,7 @@ namespace PotapanjeBrodova
         public void ObradiGađanje(RezultatGađanja rezultat)
         {
             pucač.EvidentirajRezultat(rezultat);
+            // ovisno o rezultatu treba promijeniti taktiku
             switch (rezultat)
             {
                 case RezultatGađanja.Promašaj:
