@@ -21,6 +21,7 @@ namespace KonzolnaIgra
         public void Kreni(TkoGađa tkoPrviGađa)
         {
             tkoGađa = tkoPrviGađa;
+            int brojPotopljenihBrodova = 0;
             PočetniIspis();
             do
             {
@@ -35,9 +36,10 @@ namespace KonzolnaIgra
                 }
                 // mijenjamo tko je na redu
                 tkoGađa = tkoGađa == TkoGađa.Ja ? TkoGađa.Komp : TkoGađa.Ja;
-            } while (kompovaFlota.BrojBrodova > 0 && kompovoTopništvo.BrojPreostalihBrodova > 0);
+            } while ((brojPotopljenihBrodova < kompovaFlota.BrojBrodova) && (kompovoTopništvo.BrojPreostalihBrodova > 0));
 
-            if (kompovaFlota.BrojBrodova > 0)
+            Console.WriteLine("IGRA JE GOTOVA!");
+            if (kompovoTopništvo.BrojPreostalihBrodova == 0)
                 Console.WriteLine("Komp je pobijedio!");
             else
                 Console.WriteLine("Ja sam pobijedio!");
@@ -101,6 +103,8 @@ namespace KonzolnaIgra
             Console.Write("Ti gađaš: ");
             Polje polje = UnosPolja();
             RezultatGađanja rez = kompovaFlota.Gađaj(polje);
+            if (rez == RezultatGađanja.Potonuće)
+                ++brojPotopljenihBrodova;
             Console.WriteLine(rez.ToString());
         }
 
@@ -131,5 +135,6 @@ namespace KonzolnaIgra
         Flota kompovaFlota;
         Topništvo kompovoTopništvo;
         TkoGađa tkoGađa;
+        int brojPotopljenihBrodova;
     }
 }
