@@ -20,9 +20,15 @@ namespace PotapanjeBrodova
         {
             Orijentacija o = DajOrijentaciju();
             var liste = DajPoljaUNastavku(o);
-            int indeks = liste.Count() == 1 ? 0 : slučajni.Next(liste.Count());
-            zadnjeGađano = liste.ElementAt(indeks).First();
+            // sortiraj dobivene liste po duljinama te ih grupiraj
+            liste.Sort((lista1, lista2) => lista2.Count() - lista1.Count());
+            var grupe = liste.GroupBy(lista => lista.Count());
+            // uzmi najdulju listu, a ako ih ima više onda slučajni odabir
+            var najdulji = grupe.First();
+            int indeks = najdulji.Count() == 1 ? 0 : slučajni.Next(najdulji.Count());
+            zadnjeGađano = najdulji.ElementAt(indeks).First();
             mreža.EliminirajPolje(zadnjeGađano);
+
             return zadnjeGađano;
         }
 
@@ -48,7 +54,7 @@ namespace PotapanjeBrodova
             return Orijentacija.Vertikalno;
         }
 
-        private IEnumerable<IEnumerable<Polje>> DajPoljaUNastavku(Orijentacija orijentacija)
+        private List<IEnumerable<Polje>> DajPoljaUNastavku(Orijentacija orijentacija)
         {
             switch (orijentacija)
             {
@@ -61,7 +67,7 @@ namespace PotapanjeBrodova
             }
         }
 
-        private IEnumerable<IEnumerable<Polje>> DajPoljaUNastavku(Smjer smjer1, Smjer smjer2)
+        private List<IEnumerable<Polje>> DajPoljaUNastavku(Smjer smjer1, Smjer smjer2)
         {
             List<IEnumerable<Polje>> liste = new List<IEnumerable<Polje>>();
             int redak0 = pogođenaPolja[0].Redak;
