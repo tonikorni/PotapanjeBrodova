@@ -42,6 +42,7 @@ namespace PotapanjeBrodova
             if (rezultat == RezultatGađanja.Promašaj)
                 return;
             pogođenaPolja.Add(zadnjeGađano);
+            pogođenaPolja.Sort((a, b) => a.Redak - b.Redak + a.Stupac - b.Stupac);
         }
 
         public IEnumerable<Polje> PogođenaPolja
