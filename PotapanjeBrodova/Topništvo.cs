@@ -59,6 +59,11 @@ namespace PotapanjeBrodova
             get; private set;
         }
 
+        public int BrojPreostalihBrodova
+        {
+            get { return duljineBrodova.Count; }
+        }
+
         private void PromijeniTaktikuUSlučajuPogotka()
         {
             switch (TrenutnaTaktika)
